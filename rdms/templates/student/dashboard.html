@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="pagehead"><div><h1>Welcome, {{ current_user.name.split()[0] }}</h1>
+<div class="muted">{{ current_user.profile.program.name }} · Semester {{ current_user.profile.semester }} · {{ current_user.profile.enrollment_no }}</div></div>
+<a class="btn" href="{{ url_for('student.marksheet') }}">Download marksheet (PDF)</a></div>
+{% if low %}<div class="flash warning">Attendance below 75% in: {% for a in low %}<b>{{ a.course.code }}</b> ({{ a.pct }}%){{ ', ' if not loop.last }}{% endfor %}. You may be barred from exams.</div>{% endif %}
+<div class="grid g4">
+  <div class="stat"><div class="n">{{ '%.2f'|format(cgpa) if cgpa is not none else '–' }}</div><div class="l">CGPA (out of 10)</div></div>
+  <div class="stat amber"><div class="n">{{ percentage if percentage is not none else '–' }}{{ '%' if percentage is not none }}</div><div class="l">Equivalent percentage</div></div>
+  <div class="stat green"><div class="n">{{ credits }}</div><div class="l">Credits earned</div></div>
+  <div class="stat red"><div class="n" style="font-size:1.1rem">{{ division }}</div><div class="l">Classification</div></div>
+</div>
+<div class="grid g2" style="margin-top:1rem">
+  <div class="card"><h2>SGPA by semester</h2>
+    {% if sgpa_trend %}<div class="chart">{% for s, v in sgpa_trend %}<div class="col"><b>{{ v }}</b><i style="height:{{ (v or 0) * 10 }}%"></i><span>Sem {{ s }}</span></div>{% endfor %}</div>
+    {% else %}<p class="muted">No published results yet.</p>{% endif %}</div>
+  <div class="card"><h2>Attendance</h2>
+    {% for a in attendance %}<div style="margin-bottom:.6rem"><div class="inline" style="justify-content:space-between"><span>{{ a.course.code }} · {{ a.course.title }}</span><b>{{ a.pct }}%</b></div>
+    <div class="bar {{ 'low' if a.pct < 75 else 'mid' if a.pct < 85 }}"><i style="width:{{ a.pct }}%"></i></div></div>
+    {% else %}<p class="muted">No attendance recorded yet.</p>{% endfor %}</div>
+</div>
+<div class="card"><h2>Announcements</h2>
+{% for n in notices %}<div class="notice"><b>{{ n.title }}</b> <span class="muted small">{{ n.created_at.strftime('%d %b %Y') }}</span><div>{{ n.body }}</div></div>{% else %}<p class="muted">Nothing new.</p>{% endfor %}</div>
+{% endblock %}

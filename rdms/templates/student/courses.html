@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}My courses{% endblock %}
+{% block content %}
+<h1>My Courses</h1>
+<div class="card"><div class="tablewrap"><table><tr><th>Sem</th><th>Code</th><th>Course</th><th>Credits</th><th>Faculty</th><th>Results</th></tr>
+{% for r in rows %}<tr><td>{{ r.course.semester }}</td><td>{{ r.course.code }}</td><td>{{ r.course.title }}</td><td>{{ r.course.credits }}</td><td>{{ r.course.faculty.name if r.course.faculty else '–' }}</td>
+<td><span class="badge {{ 'ok' if r.course.published and r.total is not none else '' }}">{{ 'Published' if r.course.published and r.total is not none else 'Pending' }}</span></td></tr>{% endfor %}</table></div></div>
+{% endblock %}

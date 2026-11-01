@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Attendance · {{ course.code }}{% endblock %}
+{% block content %}
+<div class="pagehead"><div><h1>Attendance · {{ course.code }}</h1><div class="muted">{{ course.title }}</div></div><a class="btn sec" href="{{ url_for('faculty.marks', course_id=course.id) }}">Marks</a></div>
+<div class="card"><form method="get" class="inline"><label style="margin:0">Date</label><input type="date" name="date" value="{{ day.isoformat() }}" max="{{ today.isoformat() }}"><button class="btn sec sm">Load</button></form></div>
+<form method="post" class="card"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="date" value="{{ day.isoformat() }}">
+<h2>{{ day.strftime('%A, %d %B %Y') }} {% if existing %}<span class="badge ok">Already marked</span>{% endif %}</h2>
+<div class="tablewrap"><table><tr><th>Present</th><th>Student</th><th>Overall attendance</th></tr>
+{% for s in students %}<tr><td><input type="checkbox" name="present" value="{{ s.id }}" {{ 'checked' if (existing[s.id].present if s.id in existing else true) }}></td><td>{{ s.name }}</td>
+<td>{% if pct[s.id] is not none %}<span class="badge {{ 'bad' if pct[s.id] < 75 else 'ok' }}">{{ pct[s.id] }}%</span>{% else %}–{% endif %}</td></tr>{% endfor %}</table></div>
+<button class="btn" style="margin-top:1rem">Save attendance</button></form>
+{% endblock %}

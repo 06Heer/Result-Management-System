@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if course else 'Add' }} course{% endblock %}
+{% block content %}
+<h1>{{ 'Edit ' ~ course.code if course else 'Add course' }}</h1>
+<form method="post" class="card" style="max-width:760px"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="frow"><div><label>Course code</label><input name="code" required value="{{ course.code if course else '' }}"></div>
+<div><label>Title</label><input name="title" required value="{{ course.title if course else '' }}"></div>
+<div><label>Programme</label><select name="program_id">{% for p in programs %}<option value="{{ p.id }}" {{ 'selected' if course and course.program_id==p.id }}>{{ p.name }}</option>{% endfor %}</select></div>
+<div><label>Semester</label><input type="number" name="semester" min="1" max="12" required value="{{ course.semester if course else 1 }}"></div>
+<div><label>Credits</label><input type="number" name="credits" min="1" max="10" required value="{{ course.credits if course else 4 }}"></div>
+<div><label>Faculty</label><select name="faculty_id"><option value="">— unassigned —</option>{% for f in faculty %}<option value="{{ f.id }}" {{ 'selected' if course and course.faculty_id==f.id }}>{{ f.name }}</option>{% endfor %}</select></div></div>
+<p style="margin-top:1rem"><button class="btn">Save</button> <a class="btn sec" href="{{ url_for('admin.courses') }}">Cancel</a></p></form>
+{% endblock %}

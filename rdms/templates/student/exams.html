@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Exam timetable{% endblock %}
+{% block content %}
+<h1>Exam Timetable</h1><p class="muted">Scheduled exams for the courses you're enrolled in.</p>
+
+<div class="card">
+<h2>Upcoming</h2>
+{% if upcoming %}
+<div class="tablewrap"><table>
+<thead><tr><th>Course</th><th>Type</th><th>Date</th><th>Time</th><th>Venue</th></tr></thead>
+<tbody>
+{% for e in upcoming %}
+<tr><td><b>{{ e.course.code }}</b><br><span class="muted small">{{ e.course.title }}</span></td>
+<td><span class="badge">{{ e.exam_type }}</span></td>
+<td>{{ e.exam_date.strftime('%d %b %Y') }}</td>
+<td>{{ e.start_time.strftime('%I:%M %p') }} &ndash; {{ e.end_time.strftime('%I:%M %p') }}</td>
+<td>{{ e.venue or '–' }}</td></tr>
+{% endfor %}
+</tbody></table></div>
+{% else %}<p class="muted">No upcoming exams scheduled.</p>{% endif %}
+</div>
+
+<div class="card" style="margin-top:1.2rem">
+<h2>Past</h2>
+{% if past %}
+<div class="tablewrap"><table>
+<thead><tr><th>Course</th><th>Type</th><th>Date</th><th>Time</th><th>Venue</th></tr></thead>
+<tbody>
+{% for e in past %}
+<tr><td><b>{{ e.course.code }}</b><br><span class="muted small">{{ e.course.title }}</span></td>
+<td><span class="badge">{{ e.exam_type }}</span></td>
+<td>{{ e.exam_date.strftime('%d %b %Y') }}</td>
+<td>{{ e.start_time.strftime('%I:%M %p') }} &ndash; {{ e.end_time.strftime('%I:%M %p') }}</td>
+<td>{{ e.venue or '–' }}</td></tr>
+{% endfor %}
+</tbody></table></div>
+{% else %}<p class="muted">No past exams on record.</p>{% endif %}
+</div>
+{% endblock %}

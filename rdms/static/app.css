@@ -1,0 +1,1489 @@
+/* ==========================================================================
+   University of India — Result Management System
+   Enhanced Design System: Twilight Sunset Glassmorphism
+   Combines the iconic old version aesthetic (#ff7200, #ff105f to #ffad06,
+   home.jpg sunset background, sliding gradient toggle) with state-of-the-art
+   dark glassmorphism, responsive micro-interactions, and premium typography.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Signature Sunset & Flame Colors from Old Version */
+  --sunset-orange: #ff7200;
+  --sunset-magenta: #ff105f;
+  --sunset-amber: #ffad06;
+  --sunset-coral: #ff5232;
+  --sunset-gradient: linear-gradient(135deg, #ff105f 0%, #ff5232 50%, #ffad06 100%);
+  --sunset-gradient-h: linear-gradient(to right, #ff105f, #ffad06);
+  --sunset-glow: rgba(255, 114, 0, 0.45);
+  --magenta-glow: rgba(255, 16, 95, 0.45);
+
+  /* Deep Twilight & Glass Surfaces */
+  --bg-dark: #090d16;
+  --bg-darker: #050810;
+  --bg-panel: #0d1322;
+  --surface-glass: rgba(14, 20, 36, 0.22);
+  --surface-glass-dashboard: rgba(17, 24, 39, 0.38);
+  --surface-glass-hover: rgba(26, 36, 56, 0.5);
+  --surface-glass-subtle: rgba(255, 255, 255, 0.06);
+  --surface-glass-solid: #111827;
+  --border-glass: rgba(255, 255, 255, 0.2);
+  --border-glass-light: rgba(255, 255, 255, 0.3);
+  --border-glass-focus: rgba(255, 114, 0, 0.7);
+
+  /* Royal Navy & Indigo (Honoring Admin Heritage) */
+  --navy-deep: #0c122b;
+  --navy-sidebar: #101736;
+  --navy-accent: #2d4af3;
+  --navy-royal: #1e3a8a;
+
+  /* Typography & Neutral Shades */
+  --text-white: #ffffff;
+  --text-silver: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --line: rgba(255, 255, 255, 0.1);
+
+  /* Semantic Feedback */
+  --green: #10b981;
+  --green-bg: rgba(16, 185, 129, 0.15);
+  --green-border: rgba(16, 185, 129, 0.35);
+  --red: #ef4444;
+  --red-bg: rgba(239, 68, 68, 0.15);
+  --red-border: rgba(239, 68, 68, 0.35);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245, 158, 11, 0.15);
+  --amber-border: rgba(245, 158, 11, 0.35);
+  --blue: #38bdf8;
+  --blue-bg: rgba(56, 189, 248, 0.15);
+  --blue-border: rgba(56, 189, 248, 0.35);
+
+  --r: 16px;
+  --r-sm: 8px;
+  --r-pill: 9999px;
+  --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 8px 30px rgba(255, 114, 0, 0.25);
+}
+
+/* ==========================================================================
+   Base Reset & Core Typography
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: var(--text-silver);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  /* starfield runs the full page, header included, instead of stopping above the content area */
+  background-image:
+    radial-gradient(ellipse at 50% 15%, rgba(255, 114, 0, 0.15) 0%, transparent 65%),
+    linear-gradient(180deg, rgba(8, 12, 22, 0.2) 0%, rgba(13, 18, 30, 0.28) 50%, rgba(8, 11, 20, 0.42) 100%),
+    url('home.jpg');
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--text-white);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.2rem; margin-bottom: 0.75rem; }
+h2 { font-size: 1.45rem; margin-bottom: 0.6rem; }
+h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+
+a {
+  color: var(--sunset-orange);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+a:hover {
+  color: #ffa04d;
+}
+
+.muted { color: var(--text-muted); }
+.small { font-size: 0.85rem; }
+.right { text-align: right; }
+.center { text-align: center; }
+
+/* ==========================================================================
+   Sunset Ambiance & Atmospheric Backgrounds
+   ========================================================================== */
+.bg-sunset {
+  /* background now lives on body so it runs behind the header too */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Subtle decorative accent glow bar at the very top */
+.sunset-accent-bar {
+  height: 4px;
+  width: 100%;
+  background: var(--sunset-gradient);
+  position: relative;
+  z-index: 100;
+  box-shadow: 0 0 16px var(--sunset-glow);
+}
+
+/* ==========================================================================
+   Public & Universal Topbar Navigation (Old Version Enhanced)
+   ========================================================================== */
+body {
+  /* room for the floating header to sit clear of the very top/sides */
+  padding-top: 1rem;
+}
+
+.topbar {
+  /* floating glass capsule — spans the full page width on desktop, where the
+     inline nav is shown edge to edge; narrows to fit just the logo + menu
+     button on mobile once the nav collapses into the side drawer */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  position: sticky;
+  top: 1rem;
+  z-index: 50;
+  margin: 0 1.5rem 1.5rem;
+  width: auto;
+  padding: 0.7rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--text-white);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: transform 0.25s ease;
+}
+
+.brand:hover {
+  color: var(--text-white);
+  transform: translateY(-1px);
+}
+
+.brand .logo-orb {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 16, 95, 0.9), rgba(255, 173, 6, 0.95));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.15rem;
+  box-shadow: 0 0 18px var(--sunset-glow), inset 0 1px 2px rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.topbar .btn {
+  background: linear-gradient(135deg, rgba(255, 16, 95, 0.88) 0%, rgba(255, 114, 0, 0.92) 50%, rgba(255, 173, 6, 0.95) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 15px rgba(255, 16, 95, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.55);
+}
+
+/* Iconic Uppercase Orange Nav Links from Old Version */
+.nav-link {
+  color: var(--sunset-orange);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.2rem;
+  position: relative;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--sunset-gradient);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  text-shadow: 0 0 12px var(--sunset-glow);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: #ffffff;
+  text-shadow: 0 0 12px var(--sunset-glow);
+}
+
+/* ==========================================================================
+   Side-open navigation drawer — shown on every page except Home, so the
+   header stays a single, uncluttered line there.
+   ========================================================================== */
+.nav-toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Hamburger + drawer are a mobile-only affordance — desktop keeps the
+   inline nav and never shows the menu button. */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 16, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.side-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 82vw);
+  background: rgba(13, 19, 34, 0.97);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5);
+  z-index: 95;
+  padding: 1.5rem 1.5rem 2rem;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-close {
+  align-self: flex-end;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--text-silver);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.drawer-nav .nav-link {
+  font-size: 1.05rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.drawer-nav .nav-user {
+  margin-top: 0.5rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.drawer-nav .user-chip {
+  justify-content: center;
+}
+
+.drawer-nav .btn {
+  width: 100%;
+}
+
+.nav-toggle-checkbox:checked ~ .drawer-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-toggle-checkbox:checked ~ .side-drawer {
+  transform: translateX(0);
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+.user-chip {
+  font-size: 0.88rem;
+  color: var(--text-silver);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--r-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-chip .role-tag {
+  background: var(--sunset-gradient);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--r-pill);
+}
+
+/* ==========================================================================
+   Public Hero & Interactive 3-Role Sliding Pill Login Card
+   (Elevating images/home.png and old home.css)
+   ========================================================================== */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1.5rem 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.c-hero-box {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(14, 20, 35, 0.22);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 28px;
+  padding: 2.2rem 2.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45),
+              inset 0 1px 2px rgba(255, 255, 255, 0.35),
+              0 0 35px rgba(255, 114, 0, 0.18);
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.c-hero-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), rgba(255, 114, 0, 0.8), transparent);
+}
+
+/* 3-Role Sliding Pill Switch */
+.c-button-box {
+  width: 100%;
+  max-width: 360px;
+  height: 48px;
+  margin: 0 auto 2rem;
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 -1px 2px rgba(255, 255, 255, 0.2), 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+#btn {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  height: calc(100% - 8px);
+  background: linear-gradient(135deg, rgba(255, 16, 95, 0.95), rgba(255, 173, 6, 0.98));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 26px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 18px rgba(255, 16, 95, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  z-index: 1;
+}
+
+.c-toggle-btn {
+  flex: 1;
+  height: 100%;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+  position: relative;
+  z-index: 2;
+  color: var(--text-muted);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-toggle-btn.active {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.c-toggle-btn:hover {
+  color: #ffffff;
+}
+
+/* Form inputs matching the old version underline styling + modern glass glow */
+.c-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.c-field-wrap {
+  position: relative;
+}
+
+.c-field-wrap label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.c-input-field {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.c-input-field::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.c-input-field:focus {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 114, 0, 0.6);
+  border-bottom-color: var(--sunset-orange);
+  box-shadow: 0 0 18px rgba(255, 114, 0, 0.45);
+}
+
+.c-checkbox-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.2rem 0;
+  font-size: 0.85rem;
+  color: var(--text-silver);
+}
+
+.c-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.c-checkbox-label input[type="checkbox"] {
+  accent-color: var(--sunset-orange);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Radiant Pill Submit Button from Old Version */
+.c-submit-btn {
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 16, 95, 0.9) 0%, rgba(255, 114, 0, 0.94) 50%, rgba(255, 173, 6, 0.98) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 30px;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 16, 95, 0.5), 0 0 20px rgba(255, 114, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.c-submit-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 114, 0, 0.98) 0%, rgba(255, 173, 6, 1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(255, 114, 0, 0.7), 0 0 25px rgba(255, 16, 95, 0.45), inset 0 1px 3px rgba(255, 255, 255, 0.7);
+}
+
+.c-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* One-Click Quick Demo Login Tooltip / Helper */
+.demo-helper {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.btn-demo-autofill {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--sunset-orange);
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  transition: all 0.25s ease;
+}
+
+.btn-demo-autofill:hover {
+  background: rgba(255, 114, 0, 0.2);
+  border-color: var(--sunset-orange);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 114, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   Public Portal Statistics & Notices (Sunset Glass Cards)
+   ========================================================================== */
+.public-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--r);
+  padding: 1.4rem 1.6rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--sunset-gradient);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 114, 0, 0.4);
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 114, 0, 0.2);
+}
+
+.stat-card.amber::before { background: var(--sunset-amber); }
+.stat-card.green::before { background: var(--green); }
+.stat-card.red::before { background: var(--sunset-magenta); }
+
+.stat-card .n {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-white);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-card .l {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* Cards & Generic Containers */
+.card {
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--r);
+  padding: 1.6rem 1.8rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: var(--text-silver);
+}
+
+.card h1, .card h2, .card h3 {
+  color: #ffffff;
+}
+
+.shell .card {
+  background: var(--surface-glass-dashboard);
+}
+
+.grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Notice / Announcement item */
+.notice {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-left: 4px solid var(--sunset-orange);
+  border-radius: var(--r-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  transition: all 0.25s ease;
+}
+
+.notice:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--sunset-magenta);
+}
+
+.notice b {
+  color: var(--text-white);
+  font-size: 1.05rem;
+}
+
+/* ==========================================================================
+   Authenticated Shell Layout (Student, Faculty, Admin Portals)
+   ========================================================================== */
+.shell {
+  display: flex;
+  min-height: calc(100vh - 65px);
+  /* transparent so the starfield behind the header carries through the rest of the page */
+  background: transparent;
+}
+
+/* Sidebar as a glass panel, matching the header/cards instead of a flat block */
+.sidebar {
+  width: 250px;
+  background: rgba(14, 20, 36, 0.18);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1.5rem 1rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sidebar .grp {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  font-weight: 700;
+  margin: 1.25rem 0.85rem 0.4rem;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  color: var(--text-silver);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateX(3px);
+}
+
+.sidebar a.active {
+  background: linear-gradient(90deg, rgba(255, 114, 0, 0.22) 0%, rgba(255, 16, 95, 0.15) 100%);
+  color: #ffffff;
+  font-weight: 700;
+  border-left: 3px solid var(--sunset-orange);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.content {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Pagination bar used on Users / Courses / Audit Log */
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pagenum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 0.4rem;
+  border-radius: 8px;
+  color: var(--text-silver);
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+
+.pagenum:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.pagenum.active {
+  background: var(--sunset-gradient);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(255, 114, 0, 0.4);
+}
+
+.pagenum.ellipsis {
+  border: none;
+  background: none;
+  color: var(--text-dim);
+}
+
+.pager .muted {
+  margin-left: auto;
+}
+
+.pagehead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.8rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Buttons & Form Elements Across Portal
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, rgba(255, 16, 95, 0.88) 0%, rgba(255, 114, 0, 0.92) 50%, rgba(255, 173, 6, 0.95) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255, 16, 95, 0.38), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, rgba(255, 114, 0, 0.95) 0%, rgba(255, 173, 6, 1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 114, 0, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn.sec {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--text-silver);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+.btn.sec:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.btn.warn {
+  background: rgba(245, 158, 11, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #111827;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.btn.warn:hover {
+  background: #fbbf24;
+  color: #111827;
+}
+
+.btn.ok {
+  background: rgba(16, 185, 129, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.btn.ok:hover {
+  background: #34d399;
+}
+
+.btn.danger {
+  background: rgba(239, 68, 68, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.btn.sm {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.82rem;
+}
+
+.btn.block {
+  width: 100%;
+  display: flex;
+}
+
+form.inline-form {
+  display: inline;
+}
+
+/* General Form Elements */
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text-silver);
+  margin: 0.85rem 0 0.35rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font: inherit;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--sunset-orange);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 114, 0, 0.35);
+}
+
+select option {
+  background-color: var(--bg-panel);
+  color: #ffffff;
+}
+
+input[type=checkbox] {
+  width: auto;
+  accent-color: var(--sunset-orange);
+}
+
+.inline {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.inline input, .inline select {
+  width: auto;
+}
+
+.frow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0 1.25rem;
+}
+
+/* ==========================================================================
+   Tables & Data Grid
+   ========================================================================== */
+.tablewrap {
+  /* sits inside an already-glass .card, so keep this layer mostly see-through
+     rather than stacking another dark tint on top of it */
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(14, 20, 36, 0.08);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  color: var(--text-silver);
+}
+
+th, td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+th {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sunset-orange);
+  font-weight: 700;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: rgba(255, 114, 0, 0.08);
+}
+
+td input[type=number] {
+  width: 80px;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   Badges, Status Pills & Visual Meters
+   ========================================================================== */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--r-pill);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-silver);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.badge.ok {
+  background: var(--green-bg);
+  color: #34d399;
+  border-color: var(--green-border);
+}
+
+.badge.bad {
+  background: var(--red-bg);
+  color: #f87171;
+  border-color: var(--red-border);
+}
+
+.badge.warn {
+  background: var(--amber-bg);
+  color: #fbbf24;
+  border-color: var(--amber-border);
+}
+
+.badge.blue {
+  background: var(--blue-bg);
+  color: #38bdf8;
+  border-color: var(--blue-border);
+}
+
+.badge.sunset {
+  background: rgba(255, 114, 0, 0.2);
+  color: var(--sunset-orange);
+  border-color: rgba(255, 114, 0, 0.4);
+}
+
+/* Attendance Progress Bar */
+.bar {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.bar > i {
+  display: block;
+  height: 100%;
+  background: var(--green);
+  border-radius: var(--r-pill);
+  transition: width 0.5s ease;
+}
+
+.bar.low > i { background: var(--red); }
+.bar.mid > i { background: var(--amber); }
+
+/* SGPA Trend Bar Chart */
+.chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.85rem;
+  height: 180px;
+  padding: 1.5rem 0.5rem 0.5rem;
+}
+
+.chart .col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+.chart .col i {
+  display: block;
+  width: 100%;
+  max-width: 45px;
+  background: var(--sunset-gradient);
+  border-radius: 8px 8px 0 0;
+  min-height: 4px;
+  box-shadow: 0 -2px 10px rgba(255, 114, 0, 0.3);
+  transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart .col span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+  font-weight: 600;
+}
+
+.chart .col b {
+  font-size: 0.85rem;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+}
+
+/* ==========================================================================
+   Flash Notifications
+   ========================================================================== */
+.flash {
+  max-width: 580px;
+  margin: 1.25rem auto 1.5rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: var(--r-pill);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 0.94rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.75rem;
+  border: 1px solid transparent;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.flash.success {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.flash.danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.flash.warning {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+.flash.info {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 2.5rem 1.5rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(10, 15, 28, 0.3);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+footer a {
+  color: var(--sunset-orange);
+}
+
+/* ==========================================================================
+   Responsive Adjustments — mobile-first: every screen is designed to work
+   well down to ~320px, with extra breathing room restored as space allows.
+   ========================================================================== */
+@media (max-width: 900px) {
+  .topbar {
+    padding: 0.6rem 0.9rem 0.6rem 1.1rem;
+    flex-wrap: nowrap;
+    margin: 0 0.75rem 1rem;
+    gap: 0.6rem;
+    width: auto;
+    max-width: none;
+    justify-content: space-between;
+  }
+  .brand {
+    flex-shrink: 0;
+  }
+  .desktop-nav {
+    display: none;
+  }
+  .hamburger-btn {
+    display: flex;
+  }
+  .stats-grid, .g4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .g2, .g3 {
+    grid-template-columns: 1fr;
+  }
+  .shell {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-right: none;
+    border-bottom: 1px solid var(--border-glass);
+    padding: 0.75rem 0.85rem;
+    gap: 0.4rem;
+  }
+  .sidebar a {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .sidebar .grp {
+    display: none;
+  }
+  .content {
+    padding: 1.5rem 1rem;
+  }
+  .card {
+    padding: 1.25rem 1.35rem;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.25rem; }
+  .topbar {
+    margin: 0 0.5rem 0.7rem;
+    padding: 0.35rem 0.5rem 0.35rem 0.6rem;
+    gap: 0.4rem;
+    top: 0.6rem;
+    width: auto;
+    max-width: none;
+    justify-content: space-between;
+  }
+  .brand {
+    font-size: 1.05rem;
+    gap: 0.4rem;
+  }
+  .brand .logo-orb {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+  }
+  .hamburger-btn {
+    width: 30px;
+    height: 30px;
+    gap: 4px;
+  }
+  .hamburger-btn span {
+    width: 14px;
+  }
+  .brand-text {
+    display: none;
+  }
+  .nav-link {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 0.3rem 0.1rem;
+  }
+  .user-chip {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+  }
+  .topbar .btn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+  }
+  .content {
+    padding: 1.25rem 0.85rem;
+  }
+  .card {
+    padding: 1.1rem 1.1rem;
+    border-radius: 16px;
+  }
+  .pagehead {
+    gap: 0.85rem;
+    margin-bottom: 1.3rem;
+  }
+  .pagehead .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  table {
+    font-size: 0.85rem;
+  }
+  th, td {
+    padding: 0.65rem 0.75rem;
+  }
+  .stats-grid, .g4 {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+  .c-hero-box {
+    padding: 1.8rem 1.4rem;
+    border-radius: 22px;
+  }
+  .hero-section {
+    padding: 2rem 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .content {
+    padding: 1rem 0.65rem;
+  }
+  .card {
+    padding: 0.95rem 0.95rem;
+  }
+  .stats-grid, .g4 {
+    grid-template-columns: 1fr;
+  }
+  .stat-card .n {
+    font-size: 1.6rem;
+  }
+  .c-hero-box {
+    padding: 1.5rem 1.1rem;
+  }
+  .c-button-box {
+    height: 44px;
+  }
+  .c-toggle-btn {
+    font-size: 0.85rem;
+  }
+  .btn {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+  }
+  .inline {
+    gap: 0.4rem;
+  }
+  .frow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .topbar, .sidebar, .btn, footer, .sunset-accent-bar {
+    display: none !important;
+  }
+  body, .shell, .content {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
+/* Video tutorial embed + reading material */
+.video-embed {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: var(--r-md, 12px);
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+}
+.video-embed iframe {
+  position: absolute; top:0; left:0; width:100%; height:100%; border:0;
+}
+.reading-body {
+  margin-top: 0.8rem;
+  padding: 0.9rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-md, 12px);
+  white-space: pre-wrap;
+  line-height: 1.6;
+}

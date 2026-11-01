@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit exam' if exam else 'Add exam' }}{% endblock %}
+{% block content %}
+<div class="pagehead"><h1>{{ 'Edit Exam' if exam else 'Add Exam' }}</h1><a class="btn sec sm" href="{{ url_for('admin.exams') }}">&larr; Exam Schedule</a></div>
+<div class="card" style="max-width:560px">
+<form method="post">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Course</label>
+<select name="course_id" required>
+  <option value="">Select a course&hellip;</option>
+  {% for c in courses %}
+  <option value="{{ c.id }}" {{ 'selected' if exam and exam.course_id==c.id }}>{{ c.code }} &middot; {{ c.title }} (Sem {{ c.semester }})</option>
+  {% endfor %}
+</select>
+<label>Exam type</label>
+<input type="text" name="exam_type" maxlength="30" value="{{ exam.exam_type if exam else 'End Semester' }}">
+<div class="grid g2">
+  <div><label>Date</label><input type="date" name="exam_date" required value="{{ exam.exam_date.isoformat() if exam else '' }}"></div>
+  <div><label>Venue</label><input type="text" name="venue" maxlength="120" value="{{ exam.venue if exam else '' }}"></div>
+</div>
+<div class="grid g2">
+  <div><label>Start time</label><input type="time" name="start_time" required value="{{ exam.start_time.strftime('%H:%M') if exam else '' }}"></div>
+  <div><label>End time</label><input type="time" name="end_time" required value="{{ exam.end_time.strftime('%H:%M') if exam else '' }}"></div>
+</div>
+<button class="btn block" style="margin-top:1.25rem">Save exam schedule</button>
+</form>
+</div>
+{% endblock %}

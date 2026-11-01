@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Admin dashboard{% endblock %}
+{% block content %}
+<h1>Administration</h1>
+<div class="grid g4">
+<div class="stat green"><div class="n">{{ counts.students }}</div><div class="l">Students</div></div>
+<div class="stat"><div class="n">{{ counts.faculty }}</div><div class="l">Faculty</div></div>
+<div class="stat amber"><div class="n">{{ counts.programs }}</div><div class="l">Programmes</div></div>
+<div class="stat red"><div class="n">{{ pending }}</div><div class="l">Courses with unpublished results</div></div></div>
+<div class="grid g2" style="margin-top:1rem">
+<div class="card"><h2>Students per programme</h2>
+{% set mx = (by_prog|map(attribute=1)|max) or 1 %}
+{% for name, n in by_prog %}<div style="margin-bottom:.5rem"><div class="inline" style="justify-content:space-between"><span class="small">{{ name }}</span><b>{{ n }}</b></div><div class="bar"><i style="width:{{ n * 100 / mx }}%;background:var(--navy)"></i></div></div>{% endfor %}</div>
+<div class="card"><h2>Grade distribution (all courses)</h2>
+{% set gm = (grade_dist|map(attribute=1)|max) or 1 %}
+<div class="chart">{% for g, n in grade_dist %}<div class="col"><b>{{ n }}</b><i style="height:{{ n * 100 / gm }}%"></i><span>{{ g }}</span></div>{% endfor %}</div></div></div>
+<div class="grid g2">
+<div class="card"><h2>Quick actions</h2><p>
+<a class="btn sm" href="{{ url_for('admin.user_form') }}">+ Add user</a>
+<a class="btn sm" href="{{ url_for('admin.course_form') }}">+ Add course</a>
+<a class="btn sm warn" href="{{ url_for('admin.announcements') }}">Post announcement</a>
+<a class="btn sm sec" href="{{ url_for('admin.export_results') }}">Export results (CSV)</a></p></div>
+<div class="card"><h2>Recent activity</h2>{% for l in logs %}<div class="small"><span class="muted">{{ l.at.strftime('%d %b %H:%M') }}</span> · {{ l.actor }} — {{ l.action }}</div>{% endfor %}
+<a class="small" href="{{ url_for('admin.audit_log') }}">View full log →</a></div></div>
+{% endblock %}

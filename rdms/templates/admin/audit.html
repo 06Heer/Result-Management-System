@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Audit log{% endblock %}
+{% block content %}
+<h1>Audit Log</h1>
+<div class="card"><div class="tablewrap"><table><tr><th>When</th><th>User</th><th>Action</th><th>IP</th></tr>
+{% for l in pagination.items %}<tr><td>{{ l.at.strftime('%d %b %Y %H:%M') }}</td><td>{{ l.actor }}</td><td>{{ l.action }}</td><td class="muted small">{{ l.ip }}</td></tr>
+{% else %}<tr><td colspan="4" class="muted">No activity recorded yet.</td></tr>{% endfor %}</table></div>
+{% include 'admin/_pager.html' %}
+</div>
+{% endblock %}

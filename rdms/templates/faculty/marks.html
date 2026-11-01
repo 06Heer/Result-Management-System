@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Marks · {{ course.code }}{% endblock %}
+{% block content %}
+<div class="pagehead"><div><h1>{{ course.code }} · {{ course.title }}</h1><div class="muted">{{ course.program.name }} · Semester {{ course.semester }} · {{ course.credits }} credits</div></div>
+<div><a class="btn sec" href="{{ url_for('faculty.attendance', course_id=course.id) }}">Attendance</a>
+<form method="post" action="{{ url_for('faculty.publish', course_id=course.id) }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<button class="btn {{ 'danger' if course.published else 'ok' }}">{{ 'Unpublish results' if course.published else 'Publish results' }}</button></form></div></div>
+<div class="grid g4"><div class="stat"><div class="n">{{ stats.count }}</div><div class="l">Students</div></div><div class="stat green"><div class="n">{{ stats.graded }}</div><div class="l">Marks entered</div></div>
+<div class="stat amber"><div class="n">{{ stats.avg if stats.avg is not none else '–' }}</div><div class="l">Average</div></div><div class="stat red"><div class="n">{{ stats.high if stats.high is not none else '–' }} / {{ stats.low if stats.low is not none else '–' }}</div><div class="l">Highest / lowest</div></div></div>
+<form method="post" class="card" style="margin-top:1rem"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="tablewrap"><table><tr><th>Enrollment</th><th>Student</th><th>Internal (0-40)</th><th>External (0-60)</th><th>Total</th><th>Grade</th></tr>
+{% for r in rows %}<tr><td>{{ r.student.profile.enrollment_no }}</td><td>{{ r.student.name }}</td>
+<td><input type="number" name="internal_{{ r.id }}" min="0" max="40" value="{{ r.internal if r.internal is not none }}"></td>
+<td><input type="number" name="external_{{ r.id }}" min="0" max="60" value="{{ r.external if r.external is not none }}"></td>
+<td>{{ r.total if r.total is not none else '–' }}</td><td>{% if r.grade %}<span class="badge {{ 'bad' if r.grade[0]=='F' else 'ok' }}">{{ r.grade[0] }}</span>{% else %}–{% endif %}</td></tr>
+{% else %}<tr><td colspan="6" class="muted">No students enrolled.</td></tr>{% endfor %}</table></div>
+<button class="btn" style="margin-top:1rem">Save marks</button></form>
+{% endblock %}

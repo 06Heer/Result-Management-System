@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Programmes{% endblock %}
+{% block public %}
+<div style="margin: 2rem auto;">
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Academic Programmes</h1>
+    <p class="muted" style="max-width: 650px; margin: 0 auto; font-size: 1.05rem;">
+      Accredited undergraduate and postgraduate degrees under the Indian higher education framework.
+    </p>
+  </div>
+
+  <div class="grid g2">
+    {% for p in programs %}
+      <div class="card" style="transition: transform 0.25s ease, border-color 0.25s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.6rem;">
+          <h2 style="font-size: 1.35rem; color: #ffffff;">{{ p.name }}</h2>
+          <span class="badge sunset">{{ p.code }}</span>
+        </div>
+        <div class="muted small" style="margin-bottom: 1rem;">
+          Faculty / Department: <b style="color: var(--text-silver);">{{ p.department.name }}</b>
+        </div>
+        <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem;">
+          <span class="badge blue">{{ '%g'|format(p.years) }} Years</span>
+          <span class="badge ok">{{ p.duration_semesters }} Semesters</span>
+          <span class="badge warn">{{ p.courses|length }} Courses</span>
+        </div>
+        <div style="padding-top: 0.85rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; font-size: 0.88rem; color: var(--text-muted);">
+          <span>Enrolled Students: <b style="color: #ffffff;">{{ p.students|length }}</b></span>
+          <span style="color: var(--sunset-orange);">Standard 10-Point Scale</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

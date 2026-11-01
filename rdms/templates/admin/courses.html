@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<div class="pagehead"><h1>Courses</h1><a class="btn" href="{{ url_for('admin.course_form') }}">+ Add course</a></div>
+<form class="card inline" method="get"><select name="program" onchange="this.form.submit()"><option value="">All programmes</option>{% for p in programs %}<option value="{{ p.id }}" {{ 'selected' if pid==p.id }}>{{ p.name }}</option>{% endfor %}</select></form>
+<div class="card"><div class="tablewrap"><table><tr><th>Code</th><th>Course</th><th>Programme</th><th>Sem</th><th>Credits</th><th>Faculty</th><th>Enrolled</th><th>Results</th><th></th></tr>
+{% for c in pagination.items %}<tr><td>{{ c.code }}</td><td>{{ c.title }}</td><td>{{ c.program.code }}</td><td>{{ c.semester }}</td><td>{{ c.credits }}</td><td>{{ c.faculty.name if c.faculty else '–' }}</td><td>{{ c.results|length }}</td>
+<td><form method="post" action="{{ url_for('admin.course_publish', course_id=c.id) }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn sm {{ 'ok' if c.published else 'sec' }}">{{ 'Published' if c.published else 'Hidden' }}</button></form></td>
+<td><a class="btn sec sm" href="{{ url_for('admin.course_form', course_id=c.id) }}">Edit</a></td></tr>
+{% else %}<tr><td colspan="9" class="muted">No courses found.</td></tr>{% endfor %}</table></div>
+{% include 'admin/_pager.html' %}
+</div>
+{% endblock %}

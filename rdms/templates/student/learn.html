@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Course content{% endblock %}
+{% block content %}
+<h1>Course Content</h1><p class="muted">Video tutorials and reading material for your enrolled courses.</p>
+
+<div class="grid g2">
+{% for c in cards %}
+<a class="card" style="display:block; text-decoration:none; color:inherit" href="{{ url_for('student.learn_course', course_id=c.course.id) }}">
+  <div class="pagehead" style="margin-bottom:.4rem">
+    <div><h2>{{ c.course.code }} &middot; {{ c.course.title }}</h2>
+    <div class="muted small">{{ c.course.program.name }} &middot; Sem {{ c.course.semester }}</div></div>
+    <span class="badge {{ 'ok' if c.pct == 100 else 'warn' }}">{{ c.pct }}%</span>
+  </div>
+  <div class="bar {{ 'low' if c.pct < 40 else ('mid' if c.pct < 100 else '') }}"><i style="width:{{ c.pct }}%"></i></div>
+  <p class="muted small" style="margin-top:.5rem">{{ c.done }} of {{ c.total }} items completed</p>
+</a>
+{% else %}
+<div class="card"><p class="muted">No course content has been added yet. Check back once your instructors publish videos or reading material.</p></div>
+{% endfor %}
+</div>
+{% endblock %}

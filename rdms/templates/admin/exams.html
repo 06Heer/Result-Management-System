@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Exam schedule{% endblock %}
+{% block content %}
+<div class="pagehead"><h1>Exam Schedule</h1><a class="btn" href="{{ url_for('admin.exam_form') }}">+ Add exam</a></div>
+<div class="card"><div class="tablewrap"><table>
+<tr><th>Course</th><th>Type</th><th>Date</th><th>Time</th><th>Venue</th><th>Actions</th></tr>
+{% for e in pagination.items %}
+<tr><td><b>{{ e.course.code }}</b><br><span class="muted small">{{ e.course.title }}</span></td>
+<td><span class="badge">{{ e.exam_type }}</span></td>
+<td>{{ e.exam_date.strftime('%d %b %Y') }}</td>
+<td>{{ e.start_time.strftime('%I:%M %p') }} &ndash; {{ e.end_time.strftime('%I:%M %p') }}</td>
+<td>{{ e.venue or '–' }}</td>
+<td class="inline">
+<a class="btn sec sm" href="{{ url_for('admin.exam_form', exam_id=e.id) }}">Edit</a>
+<form method="post" action="{{ url_for('admin.exam_delete', exam_id=e.id) }}" class="inline-form" onsubmit="return confirm('Remove this exam schedule?');"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn danger sm">Delete</button></form>
+</td></tr>
+{% else %}<tr><td colspan="6" class="muted">No exams scheduled yet.</td></tr>{% endfor %}
+</table></div>
+{% include 'admin/_pager.html' %}
+</div>
+{% endblock %}

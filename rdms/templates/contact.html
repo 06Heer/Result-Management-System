@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Contact{% endblock %}
+{% block public %}
+<div style="margin: 2rem auto;">
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Contact &amp; Support</h1>
+    <p class="muted" style="max-width: 650px; margin: 0 auto; font-size: 1.05rem;">
+      Reach out to the University Examination Cell for academic grievances, or connect directly with the project author.
+    </p>
+  </div>
+
+  <div class="grid g2">
+    <!-- University Examination Cell -->
+    <div class="card">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <span style="font-size: 1.75rem;">🏛️</span>
+        <div>
+          <h2>Examination Cell</h2>
+          <div class="muted small">Office of the Controller of Examinations</div>
+        </div>
+      </div>
+      <p style="margin-bottom: 1.25rem; line-height: 1.7;">
+        For result re-evaluations, transcript verification, attendance shortage appeals, or administrative password resets, contact the Exam Cell.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.95rem;">
+        <div>
+          <b style="color: var(--sunset-orange);">Email:</b>
+          <a href="mailto:examcell@{{ FACULTY_DOMAIN }}" style="color: #ffffff; margin-left: 0.5rem;">examcell@{{ FACULTY_DOMAIN }}</a>
+        </div>
+        <div>
+          <b style="color: var(--sunset-orange);">Helpline:</b>
+          <span style="color: #ffffff; margin-left: 0.5rem;">+91 11 5555 0100</span>
+        </div>
+        <div>
+          <b style="color: var(--sunset-orange);">Working Hours:</b>
+          <span style="color: #ffffff; margin-left: 0.5rem;">Monday – Saturday, 10:00 – 17:00 IST</span>
+        </div>
+        <div>
+          <b style="color: var(--sunset-orange);">Campus Address:</b>
+          <span style="color: #ffffff; margin-left: 0.5rem;">{{ UNI }}, Academic Block A, New Delhi, India</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Developer & Creator Profile (Abhishek Soni) -->
+    <div class="card" style="border-top: 4px solid var(--sunset-magenta);">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <span style="font-size: 1.75rem;">💻</span>
+        <div>
+          <h2>Developer &amp; Project Info</h2>
+          <div class="muted small">Designed &amp; Developed by Tanya Dwivedi</div>
+        </div>
+      </div>
+      <p style="margin-bottom: 1.25rem; line-height: 1.7;">
+        Everything you need to know about this project including schema architecture, libraries, contributions, and documentation is hosted on GitHub. Feel free to connect!
+      </p>
+
+      <!-- Social & Repository Badges from Old Version -->
+      <div style="display: flex; gap: 0.85rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+        <a href="https://github.com/06Heer/Result-Management-System" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=Github&logoColor=white" alt="GitHub Repository">
+        </a>
+        <a href="https://www.linkedin.com/in/tanya-dwivedi-7864b5256" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Profile">
+        </a>
+        <a href="mailto:tanbzzz.06@gmail.com" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email Tanya Dwivedi">
+        </a>
+      </div>
+
+      <div style="padding: 1rem; background: rgba(255, 255, 255, 0.04); border-radius: 12px; border: 1px solid var(--border-glass);">
+        <b style="color: #ffffff; font-size: 0.95rem;">Looking for source code &amp; guides?</b>
+        <p class="small muted" style="margin-top: 0.35rem;">
+          Clone the project on <a href="https://github.com/06Heer/Result-Management-System" target="_blank">GitHub</a> to inspect the SQLite schema, Flask Blueprints, and grading algorithms.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

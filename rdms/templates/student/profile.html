@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h1>My Profile</h1>
+<div class="card"><div class="grid g2">
+<div><div class="muted small">Name</div><b>{{ current_user.name }}</b></div>
+<div><div class="muted small">Enrollment number</div><b>{{ p.enrollment_no }}</b></div>
+<div><div class="muted small">Email</div>{{ current_user.email }}</div>
+<div><div class="muted small">Programme</div>{{ p.program.name }}</div>
+<div><div class="muted small">Department</div>{{ p.program.department.name }}</div>
+<div><div class="muted small">Current semester</div>{{ p.semester }} of {{ p.program.duration_semesters }}</div>
+<div><div class="muted small">Admission year</div>{{ p.admission_year }}</div>
+<div><div class="muted small">Date of birth</div>{{ p.dob.strftime('%d %b %Y') if p.dob else '–' }}</div>
+<div><div class="muted small">Gender</div>{{ p.gender or '–' }}</div>
+<div><div class="muted small">State</div>{{ p.state or '–' }}</div>
+<div><div class="muted small">Phone</div>{{ p.phone or '–' }}</div>
+<div><div class="muted small">Nationality</div>Indian</div>
+</div><p class="muted small" style="margin-top:1rem">To correct any detail, contact the Examination Cell.</p></div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.code }} course content{% endblock %}
+{% block content %}
+<div class="pagehead">
+  <div><h1>Course Content &middot; {{ course.code }}</h1><p class="muted">{{ course.title }} &mdash; add video tutorials and reading material for your students.</p></div>
+  <a class="btn sec sm" href="{{ url_for('faculty.dashboard') }}">&larr; My Courses</a>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h2>Add content</h2>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Type</label>
+      <select name="kind">
+        <option value="video">Video tutorial</option>
+        <option value="reading">Reading material</option>
+      </select>
+      <label>Title</label>
+      <input type="text" name="title" required maxlength="200" placeholder="e.g. Introduction to Arrays">
+      <label>Link (video URL, or reading link)</label>
+      <input type="text" name="url" maxlength="500" placeholder="https://www.youtube.com/watch?v=...">
+      <label>Notes / text (optional for video, or use instead of a link for reading)</label>
+      <textarea name="body" rows="4" placeholder="Any extra notes or the reading text itself"></textarea>
+      <button class="btn block" style="margin-top:1rem">Add to course</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Current content</h2>
+    {% if resources %}
+    {% for r in resources %}
+    <div class="notice">
+      <div class="pagehead">
+        <div><span class="badge {{ 'ok' if r.kind=='video' else '' }}">{{ 'Video' if r.kind=='video' else 'Reading' }}</span>
+        <b style="margin-left:.4rem">{{ r.title }}</b></div>
+        <form method="post" action="{{ url_for('faculty.learning_delete', course_id=course.id, resource_id=r.id) }}" class="inline-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn danger sm">Remove</button>
+        </form>
+      </div>
+      {% if r.url %}<div class="muted small">{{ r.url }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="muted">Nothing added yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

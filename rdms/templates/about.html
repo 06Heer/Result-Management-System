@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}About{% endblock %}
+{% block public %}
+<div style="margin: 2rem auto;">
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">About {{ UNI }}</h1>
+    <p class="muted" style="max-width: 700px; margin: 0 auto; font-size: 1.05rem;">
+      Result Management &amp; Academic Information System — engineered for transparency, modern evaluation, and seamless institutional governance.
+    </p>
+  </div>
+
+  <!-- Platform Overview -->
+  <div class="card" style="border-left: 4px solid var(--sunset-orange);">
+    <h2>Platform Overview</h2>
+    <p style="margin-bottom: 1rem; line-height: 1.8;">
+      The <strong>{{ UNI }} Result Management &amp; Academic Portal</strong> is a full-stack academic information system built to give students, faculty and administrators a single, secure place to manage results, attendance and course delivery — from raw marks entry to SGPA/CGPA computation and downloadable transcripts.
+    </p>
+    <p style="color: var(--text-silver); line-height: 1.8;">
+      The platform covers multi-role authentication, automated grade computation, attendance tracking with shortage alerts, PDF transcript generation, exam scheduling, and an integrated learning module for course video tutorials and reading material — all backed by an auditable, security-hardened data layer.
+    </p>
+  </div>
+
+  <!-- Academic Departments -->
+  <div class="card">
+    <h2>Academic Departments</h2>
+    <div class="grid g2" style="margin-top: 1rem;">
+      {% for d in depts %}
+      <div style="background: rgba(255, 255, 255, 0.03); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-glass);">
+        <b style="font-size: 1.1rem; color: #ffffff;">{{ d.name }}</b>
+        <div class="muted small" style="margin-top: 0.35rem;">
+          <span class="badge sunset">{{ d.code }}</span> &nbsp;·&nbsp; {{ d.programs|length }} Academic Programme(s)
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- 10-Point Indian Grading Scale -->
+  <div class="card">
+    <h2>Standard Indian 10-Point Grading System</h2>
+    <p class="muted small" style="margin-bottom: 1rem;">
+      Calculated automatically for all semester results. SGPA = Σ(Grade Points × Credits) ÷ Σ Credits. Equivalent Percentage = CGPA × 9.5.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Marks Range</th>
+            <th>Letter Grade</th>
+            <th>Grade Points</th>
+            <th>Academic Standing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>90 – 100</td><td><span class="badge ok">O</span></td><td>10</td><td>Outstanding</td></tr>
+          <tr><td>80 – 89</td><td><span class="badge ok">A+</span></td><td>9</td><td>Excellent</td></tr>
+          <tr><td>70 – 79</td><td><span class="badge ok">A</span></td><td>8</td><td>Very Good</td></tr>
+          <tr><td>60 – 69</td><td><span class="badge blue">B+</span></td><td>7</td><td>Good</td></tr>
+          <tr><td>50 – 59</td><td><span class="badge blue">B</span></td><td>6</td><td>Above Average</td></tr>
+          <tr><td>45 – 49</td><td><span class="badge warn">C</span></td><td>5</td><td>Average</td></tr>
+          <tr><td>40 – 44</td><td><span class="badge warn">P</span></td><td>4</td><td>Pass</td></tr>
+          <tr><td>Below 40</td><td><span class="badge bad">F</span></td><td>0</td><td>Fail (Arrear)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

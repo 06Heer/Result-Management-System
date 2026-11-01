@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Result Portal{% endblock %} · {{ UNI }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/png">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}?v=25">
+</head>
+<body>
+<input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox">
+<header class="topbar">
+  <a class="brand" href="{{ url_for('main.index') }}">
+    <span class="logo-orb">U</span>
+    <span class="brand-text">{{ UNI }}</span>
+  </a>
+  <nav class="desktop-nav">
+    <a href="{{ url_for('main.index') }}" class="nav-link {{ 'active' if request.endpoint == 'main.index' }}">HOME</a>
+    <a href="{{ url_for('main.about') }}" class="nav-link {{ 'active' if request.endpoint == 'main.about' }}">ABOUT</a>
+    <a href="{{ url_for('main.programs') }}" class="nav-link {{ 'active' if request.endpoint == 'main.programs' }}">PROGRAMMES</a>
+    <a href="{{ url_for('main.contact') }}" class="nav-link {{ 'active' if request.endpoint == 'main.contact' }}">CONTACT</a>
+    {% if current_user.is_authenticated %}
+      <div class="nav-user">
+        <span class="user-chip">
+          <span>{{ current_user.name }}</span>
+          <span class="role-tag">{{ current_user.role }}</span>
+        </span>
+        <form method="post" action="{{ url_for('main.logout') }}" class="inline-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn sec sm">Sign out</button>
+        </form>
+      </div>
+    {% else %}
+      <a class="btn sm" href="{{ url_for('main.login') }}">SIGN IN</a>
+    {% endif %}
+  </nav>
+  <label for="nav-toggle" class="hamburger-btn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </label>
+</header>
+
+<label for="nav-toggle" class="drawer-overlay"></label>
+<aside class="side-drawer">
+  <label for="nav-toggle" class="drawer-close" aria-label="Close menu">&times;</label>
+  <nav class="drawer-nav">
+    <a href="{{ url_for('main.index') }}" class="nav-link {{ 'active' if request.endpoint == 'main.index' }}">HOME</a>
+    <a href="{{ url_for('main.about') }}" class="nav-link {{ 'active' if request.endpoint == 'main.about' }}">ABOUT</a>
+    <a href="{{ url_for('main.programs') }}" class="nav-link {{ 'active' if request.endpoint == 'main.programs' }}">PROGRAMMES</a>
+    <a href="{{ url_for('main.contact') }}" class="nav-link {{ 'active' if request.endpoint == 'main.contact' }}">CONTACT</a>
+    {% if current_user.is_authenticated %}
+      <div class="nav-user">
+        <span class="user-chip">
+          <span>{{ current_user.name }}</span>
+          <span class="role-tag">{{ current_user.role }}</span>
+        </span>
+        <form method="post" action="{{ url_for('main.logout') }}" class="inline-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn sec sm">Sign out</button>
+        </form>
+      </div>
+    {% else %}
+      <a class="btn sm" href="{{ url_for('main.login') }}">SIGN IN</a>
+    {% endif %}
+  </nav>
+</aside>
+
+{% macro flashes() %}
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}
+      <div class="flash {{ cat if cat in ['success','danger','warning','info'] else 'info' }}">
+        {{ m }}
+      </div>
+    {% endfor %}
+  {% endwith %}
+{% endmacro %}
+
+{% if current_user.is_authenticated and request.blueprint in ['student','faculty','admin'] or (current_user.is_authenticated and request.endpoint == 'main.change_password') %}
+<div class="shell">
+  <aside class="sidebar">
+    {% set ep = request.endpoint or '' %}
+    {% if current_user.role == 'student' %}
+      <a href="{{ url_for('student.dashboard') }}" class="{{ 'active' if ep=='student.dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('student.results') }}" class="{{ 'active' if ep=='student.results' }}">My Results</a>
+      <a href="{{ url_for('student.courses') }}" class="{{ 'active' if ep=='student.courses' }}">My Courses</a>
+      <a href="{{ url_for('student.attendance') }}" class="{{ 'active' if ep=='student.attendance' }}">Attendance</a>
+      <div class="grp">Learn</div>
+      <a href="{{ url_for('student.exams') }}" class="{{ 'active' if ep=='student.exams' }}">Exam Timetable</a>
+      <a href="{{ url_for('student.learn') }}" class="{{ 'active' if ep in ['student.learn','student.learn_course'] }}">Course Content</a>
+      <a href="{{ url_for('student.profile') }}" class="{{ 'active' if ep=='student.profile' }}">Profile</a>
+    {% elif current_user.role == 'faculty' %}
+      <a href="{{ url_for('faculty.dashboard') }}" class="{{ 'active' if ep=='faculty.dashboard' }}">My Courses</a>
+    {% else %}
+      <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if ep=='admin.dashboard' }}">Dashboard</a>
+      <div class="grp">People</div>
+      <a href="{{ url_for('admin.users') }}" class="{{ 'active' if ep in ['admin.users','admin.user_form'] }}">Users</a>
+      <div class="grp">Academics</div>
+      <a href="{{ url_for('admin.academics') }}" class="{{ 'active' if ep=='admin.academics' }}">Departments &amp; Programmes</a>
+      <a href="{{ url_for('admin.courses') }}" class="{{ 'active' if ep in ['admin.courses','admin.course_form'] }}">Courses</a>
+      <a href="{{ url_for('admin.exams') }}" class="{{ 'active' if ep in ['admin.exams','admin.exam_form'] }}">Exam Schedule</a>
+      <div class="grp">Insights</div>
+      <a href="{{ url_for('admin.reports') }}" class="{{ 'active' if ep=='admin.reports' }}">Reports</a>
+      <a href="{{ url_for('admin.announcements') }}" class="{{ 'active' if ep=='admin.announcements' }}">Announcements</a>
+      <a href="{{ url_for('admin.audit_log') }}" class="{{ 'active' if ep=='admin.audit_log' }}">Audit Log</a>
+    {% endif %}
+    <div class="grp">Account</div>
+    <a href="{{ url_for('main.change_password') }}" class="{{ 'active' if ep=='main.change_password' }}">Change Password</a>
+  </aside>
+  <main class="content">
+    {{ flashes() }}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}
+<div class="bg-sunset">
+  <div class="public-container">
+    {{ flashes() }}
+    {% block public %}{% endblock %}
+  </div>
+</div>
+{% endif %}
+</body>
+</html>

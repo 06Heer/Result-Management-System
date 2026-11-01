@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Announcements{% endblock %}
+{% block content %}
+<h1>Announcements</h1>
+<form method="post" class="card" style="max-width:720px"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Title</label><input name="title" required maxlength="200"><label>Message</label><textarea name="body" rows="3" required></textarea>
+<label>Audience</label><select name="audience"><option value="all">Everyone (also on home page)</option><option value="student">Students</option><option value="faculty">Faculty</option></select>
+<button class="btn" style="margin-top:.8rem">Post</button></form>
+{% for a in items %}<div class="card"><div class="pagehead" style="margin:0"><div><b>{{ a.title }}</b> <span class="badge blue">{{ a.audience }}</span> <span class="muted small">{{ a.created_at.strftime('%d %b %Y') }}</span></div>
+<form method="post" action="{{ url_for('admin.announcement_delete', aid=a.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn danger sm">Delete</button></form></div><div>{{ a.body }}</div></div>{% endfor %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Attendance{% endblock %}
+{% block content %}
+<h1>Attendance</h1><p class="muted">A minimum of 75% is required in each course.</p>
+<div class="card"><div class="tablewrap"><table><tr><th>Course</th><th>Classes held</th><th>Attended</th><th>Percentage</th><th></th></tr>
+{% for a in rows %}<tr><td>{{ a.course.code }} · {{ a.course.title }}</td><td>{{ a.total }}</td><td>{{ a.present }}</td><td style="width:200px"><div class="bar {{ 'low' if a.pct < 75 else 'mid' if a.pct < 85 }}"><i style="width:{{ a.pct }}%"></i></div></td>
+<td><span class="badge {{ 'bad' if a.pct < 75 else 'ok' }}">{{ a.pct }}%{{ ' · Shortage' if a.pct < 75 }}</span></td></tr>
+{% else %}<tr><td colspan="5" class="muted">No attendance recorded yet.</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

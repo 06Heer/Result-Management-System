@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if user else 'Add' }} user{% endblock %}
+{% block content %}
+{% set v = form if form else {} %}
+{% set p = user.profile if user and user.profile else none %}
+<h1>{{ 'Edit ' ~ user.name if user else 'Add user' }}</h1>
+<form method="post" class="card" style="max-width:820px"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="frow">
+<div><label>Role</label><select name="role" id="role" {{ 'disabled' if user }} onchange="toggle()">
+{% for r in ['student','faculty','admin'] %}<option value="{{ r }}" {{ 'selected' if (user.role if user else v.get('role','student'))==r }}>{{ r|title }}</option>{% endfor %}</select></div>
+<div><label>Full name</label><input name="name" required value="{{ v.get('name', user.name if user else '') }}"></div>
+<div><label>Email</label><input type="email" name="email" required value="{{ v.get('email', user.email if user else '') }}"><div class="muted small">Any valid email address (e.g. name@{{ STUDENT_DOMAIN }})</div></div>
+{% if not user %}<div><label>Initial password</label><input type="password" name="password" required minlength="8"><div class="muted small">8+ characters, letters and numbers</div></div>{% endif %}
+</div>
+<div id="studentFields"><h2 style="margin-top:1.2rem">Student details</h2><div class="frow">
+<div><label>Programme</label><select name="program_id">{% for pr in programs %}<option value="{{ pr.id }}" {{ 'selected' if (p.program_id if p else v.get('program_id')|int(0))==pr.id }}>{{ pr.name }}</option>{% endfor %}</select></div>
+<div><label>Current semester</label><input type="number" name="semester" min="1" max="10" value="{{ v.get('semester', p.semester if p else 1) }}"></div>
+<div><label>Admission year</label><input type="number" name="admission_year" value="{{ v.get('admission_year', p.admission_year if p else today_year) }}"></div>
+<div><label>Enrollment no. (optional)</label><input name="enrollment_no" value="{{ v.get('enrollment_no', p.enrollment_no if p else '') }}" placeholder="Auto-generated if blank"></div>
+<div><label>Date of birth</label><input type="date" name="dob" value="{{ v.get('dob', p.dob.isoformat() if p and p.dob else '') }}"></div>
+<div><label>Gender</label><select name="gender">{% for g in ['Male','Female','Other'] %}<option {{ 'selected' if (p.gender if p else v.get('gender'))==g }}>{{ g }}</option>{% endfor %}</select></div>
+<div><label>State</label><select name="state">{% for s in states %}<option {{ 'selected' if (p.state if p else v.get('state'))==s }}>{{ s }}</option>{% endfor %}</select></div>
+<div><label>Phone</label><input name="phone" value="{{ v.get('phone', p.phone if p else '') }}"></div></div></div>
+<p style="margin-top:1.2rem"><button class="btn">Save</button> <a class="btn sec" href="{{ url_for('admin.users') }}">Cancel</a></p></form>
+<script>function toggle(){var r=document.getElementById('role');document.getElementById('studentFields').style.display=(r.value==='student')?'block':'none'}toggle();</script>
+{% endblock %}

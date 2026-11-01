@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}My results{% endblock %}
+{% block content %}
+<div class="pagehead"><div><h1>My Results</h1>
+<div class="muted">CGPA <b>{{ '%.2f'|format(cgpa) if cgpa is not none else '–' }}</b> · {{ percentage if percentage is not none else '–' }}% · {{ division }}</div></div>
+{% if data %}<a class="btn" href="{{ url_for('student.marksheet') }}">Full marksheet (PDF)</a>{% endif %}</div>
+{% for sem, rows, sg in data %}
+<div class="card"><div class="pagehead" style="margin-bottom:.3rem"><h2>Semester {{ sem }} <span class="badge blue">SGPA {{ '%.2f'|format(sg) }}</span></h2>
+<a class="btn sec sm" href="{{ url_for('student.marksheet', sem=sem) }}">Download PDF</a></div>
+<div class="tablewrap"><table><tr><th>Code</th><th>Course</th><th>Credits</th><th>Internal /40</th><th>External /60</th><th>Total</th><th>Grade</th><th>Status</th></tr>
+{% for r in rows %}<tr><td>{{ r.course.code }}</td><td>{{ r.course.title }}</td><td>{{ r.course.credits }}</td><td>{{ r.internal }}</td><td>{{ r.external }}</td><td><b>{{ r.total }}</b></td>
+<td><span class="badge {{ 'bad' if r.grade[0]=='F' else 'ok' }}">{{ r.grade[0] }}</span></td><td>{{ 'Fail' if r.grade[0]=='F' else 'Pass' }}</td></tr>{% endfor %}</table></div></div>
+{% else %}<div class="card"><p class="muted">No results have been published for you yet.</p></div>{% endfor %}
+{% endblock %}

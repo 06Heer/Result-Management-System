@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Departments &amp; programmes{% endblock %}
+{% block content %}
+<h1>Departments &amp; Programmes</h1>
+<div class="grid g2">
+<div class="card"><h2>Departments</h2><table><tr><th>Code</th><th>Name</th></tr>{% for d in departments %}<tr><td>{{ d.code }}</td><td>{{ d.name }}</td></tr>{% endfor %}</table>
+<form method="post" class="inline" style="margin-top:1rem"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="kind" value="department"><input name="code" placeholder="Code" required maxlength="10" style="width:90px"><input name="name" placeholder="Department name" required><button class="btn sm">Add</button></form></div>
+<div class="card"><h2>Programmes</h2><table><tr><th>Code</th><th>Name</th><th>Sems</th></tr>{% for p in programs %}<tr><td>{{ p.code }}</td><td>{{ p.name }}<div class="muted small">{{ p.department.name }}</div></td><td>{{ p.duration_semesters }}</td></tr>{% endfor %}</table>
+<form method="post" style="margin-top:1rem"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="kind" value="program">
+<div class="inline"><input name="code" placeholder="Code" required maxlength="10" style="width:90px"><input name="name" placeholder="Programme name" required><input type="number" name="duration" value="8" min="1" max="12" style="width:80px" title="Semesters"></div>
+<div class="inline" style="margin-top:.5rem"><select name="department_id">{% for d in departments %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}</select><button class="btn sm">Add programme</button></div></form></div></div>
+{% endblock %}

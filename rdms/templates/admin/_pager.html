@@ -1,0 +1,26 @@
+{# Numbered pagination bar. Expects `pagination` (a Flask-SQLAlchemy Pagination object)
+   and reuses the current URL's query string, so filters like ?q= or ?role= are kept. #}
+{% if pagination and pagination.pages and pagination.pages > 1 %}
+{% set args = request.args.to_dict() %}
+<div class="pager">
+  {% if pagination.has_prev %}
+    {% set _ = args.update({'page': pagination.prev_num}) %}
+    <a class="btn sec sm" href="{{ url_for(request.endpoint, **args) }}">&larr; Prev</a>
+  {% endif %}
+
+  {% for p in pagination.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) %}
+    {% if p %}
+      {% set _ = args.update({'page': p}) %}
+      <a class="pagenum {{ 'active' if p == pagination.page }}" href="{{ url_for(request.endpoint, **args) }}">{{ p }}</a>
+    {% else %}
+      <span class="pagenum ellipsis">&hellip;</span>
+    {% endif %}
+  {% endfor %}
+
+  {% if pagination.has_next %}
+    {% set _ = args.update({'page': pagination.next_num}) %}
+    <a class="btn sec sm" href="{{ url_for(request.endpoint, **args) }}">Next &rarr;</a>
+  {% endif %}
+  <span class="muted small">{{ pagination.total }} total</span>
+</div>
+{% endif %}

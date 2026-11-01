@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.code }} content{% endblock %}
+{% block content %}
+<div class="pagehead">
+  <div><h1>{{ course.code }} &middot; {{ course.title }}</h1><p class="muted">{{ course.program.name }} &middot; Sem {{ course.semester }}</p></div>
+  <a class="btn sec sm" href="{{ url_for('student.learn') }}">&larr; All courses</a>
+</div>
+
+{% if course.resources %}
+<div class="grid" style="gap:1rem">
+{% for r in course.resources %}
+<div class="card">
+  <div class="pagehead" style="margin-bottom:.6rem">
+    <div><span class="badge {{ 'ok' if r.kind=='video' else '' }}">{{ 'Video' if r.kind=='video' else 'Reading' }}</span>
+    <h2 style="display:inline; margin-left:.5rem">{{ r.title }}</h2></div>
+    <form method="post" action="{{ url_for('student.toggle_resource', resource_id=r.id) }}" class="inline-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn {{ 'sec' if r.id in done_ids else '' }} sm">{{ '✓ Completed' if r.id in done_ids else 'Mark done' }}</button>
+    </form>
+  </div>
+  {% if r.kind == 'video' %}
+    {% if r.embed_url %}
+    <div class="video-embed"><iframe src="{{ r.embed_url }}" allowfullscreen loading="lazy"></iframe></div>
+    {% elif r.url %}
+    <div class="reading-body"><p class="muted" style="margin:0 0 .6rem">This video link couldn't be embedded here.</p>
+    <a class="btn sec sm" href="{{ r.url }}" target="_blank" rel="noopener">Open video in a new tab &rarr;</a></div>
+    {% else %}
+    <p class="muted">No video link has been added yet.</p>
+    {% endif %}
+    {% if r.body %}<p style="margin-top:.8rem">{{ r.body }}</p>{% endif %}
+  {% else %}
+    {% if r.url %}<p><a class="btn sec sm" href="{{ r.url }}" target="_blank" rel="noopener">Open reading material &rarr;</a></p>{% endif %}
+    {% if r.body %}<div class="reading-body">{{ r.body }}</div>{% endif %}
+  {% endif %}
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="card"><p class="muted">No content has been added for this course yet.</p></div>
+{% endif %}
+{% endblock %}

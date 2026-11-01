@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.code }} exam schedule{% endblock %}
+{% block content %}
+<div class="pagehead">
+  <div><h1>Exam Schedule &middot; {{ course.code }}</h1><p class="muted">{{ course.title }}</p></div>
+  <a class="btn sec sm" href="{{ url_for('faculty.dashboard') }}">&larr; My Courses</a>
+</div>
+
+<div class="card">
+{% if rows %}
+<div class="tablewrap"><table>
+<thead><tr><th>Type</th><th>Date</th><th>Time</th><th>Venue</th></tr></thead>
+<tbody>
+{% for e in rows %}
+<tr><td><span class="badge">{{ e.exam_type }}</span></td>
+<td>{{ e.exam_date.strftime('%d %b %Y') }}</td>
+<td>{{ e.start_time.strftime('%I:%M %p') }} &ndash; {{ e.end_time.strftime('%I:%M %p') }}</td>
+<td>{{ e.venue or '–' }}</td></tr>
+{% endfor %}
+</tbody></table></div>
+{% else %}
+<p class="muted">No exam has been scheduled for this course yet. Ask the administrator to add one from Admin &rarr; Exam Schedule.</p>
+{% endif %}
+</div>
+{% endblock %}
